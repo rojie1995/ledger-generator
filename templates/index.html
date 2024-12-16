@@ -8,10 +8,11 @@
     body {
         background-color: var(--light-pink);
         font-family: 'Quicksand', sans-serif;
-        padding: 10px;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
         position: relative;
         overflow-x: hidden;
-        min-height: 100vh;
     }
 
     /* Mobile-first styles */
@@ -92,8 +93,12 @@
 
     /* Floating elements adjustments for mobile */
     .mermaid {
-        width: 100px;
-        height: 100px;
+        position: fixed;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.8;
+        will-change: transform;
+        filter: drop-shadow(0 0 10px rgba(255, 182, 193, 0.3));
     }
 
     .mermaid-1 {
@@ -111,23 +116,24 @@
         left: 5%;
     }
 
-    .bubble {
-        width: 30px;
-        height: 30px;
-    }
-
-    .footer {
+    .bubble-container {
         position: fixed;
-        bottom: 5px;
+        top: 0;
         left: 0;
         width: 100%;
-        text-align: center;
-        color: var(--primary-pink);
-        font-weight: 600;
-        font-size: 0.8rem;
-        padding: 5px;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(5px);
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .bubble {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: url("{{ url_for('static', filename='Images/colorful-soap-bubbles-free-png.webp') }}") no-repeat center/contain;
+        pointer-events: none;
+        opacity: 0.6;
+        will-change: transform;
     }
 
     /* Tablet and desktop styles */
@@ -156,18 +162,78 @@
 
         .mermaid {
             width: 150px;
-            height: 150px;
+            height: auto;
         }
 
-        .footer {
-            font-size: 1rem;
-            padding: 10px;
+        .mermaid-1 {
+            top: 15%;
+            left: 10%;
+            animation: float1 8s ease-in-out infinite;
         }
 
-        .bubble {
-            width: 50px;
-            height: 50px;
+        .mermaid-2 {
+            top: 45%;
+            right: 10%;
+            animation: float2 7s ease-in-out infinite;
         }
+
+        .mermaid-3 {
+            bottom: 25%;
+            left: 15%;
+            animation: float3 6s ease-in-out infinite;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .mermaid {
+            width: 80px;
+            height: auto;
+        }
+        
+        .mermaid-1 {
+            top: 10%;
+            left: 5%;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .mermaid-2 {
+            top: 40%;
+            right: 5%;
+            animation: float2 7s ease-in-out infinite;
+        }
+
+        .mermaid-3 {
+            bottom: 20%;
+            left: 8%;
+            animation: float3 6s ease-in-out infinite;
+        }
+
+        .container {
+            margin-top: 1rem;
+        }
+    }
+
+    @keyframes float1 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(15px, -15px) rotate(5deg); }
+        66% { transform: translate(-15px, 15px) rotate(-5deg); }
+    }
+
+    @keyframes float2 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(-15px, -15px) rotate(-5deg); }
+        66% { transform: translate(15px, 15px) rotate(5deg); }
+    }
+
+    @keyframes float3 {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(15px, 15px) rotate(5deg); }
+        66% { transform: translate(-15px, -15px) rotate(-5deg); }
+    }
+
+    @keyframes float-bubble {
+        0% { transform: translate(var(--start-x), 110vh) rotate(0deg); }
+        100% { transform: translate(var(--end-x), -10vh) rotate(360deg); }
     }
 
     /* Improved scrollbar for mobile */
@@ -206,9 +272,9 @@
     <div class="bubble-container"></div>
 
     <!-- Floating Mermaids -->
-    <img src="/static/Images/pngimg.com - ariel_PNG53.png" alt="Mermaid" class="mermaid mermaid-1">
-    <img src="/static/Images/pngimg.com - ariel_PNG6.png" alt="Mermaid" class="mermaid mermaid-2">
-    <img src="/static/Images/a21e650effa899cfa4e4a7bb32783164.png" alt="Mermaid" class="mermaid mermaid-3">
+    <img src="{{ url_for('static', filename='Images/pngimg.com - ariel_PNG53.png') }}" alt="Mermaid" class="mermaid mermaid-1">
+    <img src="{{ url_for('static', filename='Images/pngimg.com - ariel_PNG6.png') }}" alt="Mermaid" class="mermaid mermaid-2">
+    <img src="{{ url_for('static', filename='Images/a21e650effa899cfa4e4a7bb32783164.png') }}" alt="Mermaid" class="mermaid mermaid-3">
 
     <div class="container">
         <h1>✨ Ledger Generator ✨</h1>
@@ -386,37 +452,35 @@
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
             
-            // Random size between 30px and 100px
-            const size = Math.random() * 70 + 30;
+            const size = Math.random() * 40 + 20;
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             
-            // Random starting and ending X positions
-            const startX = Math.random() * 100;
-            const endX = startX + (Math.random() * 40 - 20);
+            const startX = Math.random() * window.innerWidth;
+            const endX = startX + (Math.random() * 200 - 100);
+            const duration = Math.random() * 4 + 6;
             
-            // Random duration between 8 and 15 seconds
-            const duration = Math.random() * 7 + 8;
-            
-            bubble.style.setProperty('--start-x', `${startX}vw`);
-            bubble.style.setProperty('--end-x', `${endX}vw`);
-            bubble.style.setProperty('--duration', `${duration}s`);
+            bubble.style.left = `${startX}px`;
+            bubble.style.animation = `float-bubble ${duration}s linear infinite`;
+            bubble.style.setProperty('--start-x', `${startX}px`);
+            bubble.style.setProperty('--end-x', `${endX}px`);
             
             document.querySelector('.bubble-container').appendChild(bubble);
             
-            // Remove bubble after animation
-            bubble.addEventListener('animationend', () => {
+            setTimeout(() => {
                 bubble.remove();
-            });
+            }, duration * 1000);
         }
-
-        // Create bubbles periodically
-        setInterval(createBubble, 1000);
 
         // Create initial bubbles
         for (let i = 0; i < 15; i++) {
-            createBubble();
+            setTimeout(() => {
+                createBubble();
+            }, i * 300);
         }
+
+        // Create new bubbles periodically
+        setInterval(createBubble, 1000);
     </script>
 </body>
 </html>
