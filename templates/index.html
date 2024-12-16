@@ -1,0 +1,422 @@
+        <style>
+    :root {
+        --primary-pink: #FF69B4;
+        --secondary-pink: #FFB6C1;
+        --light-pink: #FFF0F5;
+    }
+    
+    body {
+        background-color: var(--light-pink);
+        font-family: 'Quicksand', sans-serif;
+        padding: 10px;
+        position: relative;
+        overflow-x: hidden;
+        min-height: 100vh;
+    }
+
+    /* Mobile-first styles */
+    .container {
+        max-width: 100%;
+        padding: 10px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    h1 {
+        color: var(--primary-pink);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 1.8rem;
+        padding: 0 10px;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+        margin-bottom: 15px;
+        border: none;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+    }
+
+    .form-label {
+        color: var(--primary-pink);
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 12px;
+        border: 2px solid var(--secondary-pink);
+        padding: 8px 12px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-pink);
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 1rem;
+        width: 100%;
+        margin-top: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Results styling */
+    .results-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        margin-top: 15px;
+    }
+
+    .history-item {
+        border-left: 4px solid var(--primary-pink);
+        margin-bottom: 12px;
+        padding: 12px;
+        background-color: white;
+        border-radius: 12px;
+        font-size: 0.9rem;
+    }
+
+    /* Floating elements adjustments for mobile */
+    .mermaid {
+        width: 100px;
+        height: 100px;
+    }
+
+    .mermaid-1 {
+        top: 5%;
+        left: 2%;
+    }
+
+    .mermaid-2 {
+        top: 50%;
+        right: 2%;
+    }
+
+    .mermaid-3 {
+        bottom: 5%;
+        left: 5%;
+    }
+
+    .bubble {
+        width: 30px;
+        height: 30px;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 5px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: var(--primary-pink);
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+    }
+
+    /* Tablet and desktop styles */
+    @media (min-width: 768px) {
+        .container {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .card {
+            padding: 25px;
+        }
+
+        .form-label {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            width: auto;
+            min-width: 200px;
+        }
+
+        .mermaid {
+            width: 150px;
+            height: 150px;
+        }
+
+        .footer {
+            font-size: 1rem;
+            padding: 10px;
+        }
+
+        .bubble {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    /* Improved scrollbar for mobile */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--light-pink);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--secondary-pink);
+        border-radius: 10px;
+    }
+
+    /* Add tap highlight color for better mobile feedback */
+    * {
+        -webkit-tap-highlight-color: rgba(255, 105, 180, 0.2);
+    }
+
+    /* Improve touch targets */
+    button, input, select {
+        min-height: 44px;
+    }
+</style>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+    <!-- Bubble Container -->
+    <div class="bubble-container"></div>
+
+    <!-- Floating Mermaids -->
+    <img src="/static/Images/pngimg.com - ariel_PNG53.png" alt="Mermaid" class="mermaid mermaid-1">
+    <img src="/static/Images/pngimg.com - ariel_PNG6.png" alt="Mermaid" class="mermaid mermaid-2">
+    <img src="/static/Images/a21e650effa899cfa4e4a7bb32783164.png" alt="Mermaid" class="mermaid mermaid-3">
+
+    <div class="container">
+        <h1>✨ Ledger Generator ✨</h1>
+        
+        <!-- Input Card -->
+        <div class="card">
+            <div class="card-body">
+                <form id="incomeForm">
+                    <div class="mb-3">
+                        <label for="month" class="form-label">Select Month:</label>
+                        <select class="form-select" id="month" required>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="days" class="form-label">Enter Total Days (20-30):</label>
+                        <input type="number" class="form-control" id="days" required min="20" max="30">
+                    </div>
+                    <div class="mb-3">
+                        <label for="total" class="form-label">Enter Total Income (₱40,000-₱90,000):</label>
+                        <input type="number" class="form-control" id="total" required min="40000" max="90000">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Generate Daily Incomes ✨</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="current-tab" data-bs-toggle="tab" data-bs-target="#current" type="button" role="tab">Current Results</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">History</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Current Results Tab -->
+            <div class="tab-pane fade show active" id="current" role="tabpanel">
+                <div class="card">
+                    <div class="card-body" id="currentResults">
+                        <p class="text-muted text-center">Generate income to see results ✨</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- History Tab -->
+            <div class="tab-pane fade" id="history" role="tabpanel">
+                <div class="card">
+                    <div class="card-body" id="historyResults">
+                        <p class="text-muted text-center">No history yet ✨</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">Created with 💖 by Rojie</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Store history in localStorage
+        let history = JSON.parse(localStorage.getItem('incomeHistory') || '[]');
+
+        // Set current month as default
+        document.getElementById('month').value = new Date().getMonth() + 1;
+
+        function formatNumber(num) {
+            return '₱' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function getMonthName(monthNumber) {
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            return months[monthNumber - 1];
+        }
+
+        function displayResults(data, container) {
+            let html = `
+                <div class="history-item">
+                    <h5 class="mb-3">✨ Generated on: ${data.timestamp}</h5>
+                    <p>Month: ${getMonthName(data.month)}</p>
+                    <p>Total Days: ${data.total_days}</p>
+                    <p>Target Total: ${formatNumber(data.target_total)}</p>
+                    <div class="income-list">
+                        <h6>Daily Incomes:</h6>
+                        ${data.daily_incomes.map(item => 
+                            `<p>Day ${item.day}: ${formatNumber(item.income)}</p>`
+                        ).join('')}
+                    </div>
+                    <p class="mt-2">Actual Total: ${formatNumber(data.actual_total)}</p>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('historyResults');
+            if (history.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No history yet ✨</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            history.forEach(data => {
+                displayResults(data, container);
+            });
+        }
+
+        document.getElementById('incomeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const month = document.getElementById('month').value;
+            const days = document.getElementById('days').value;
+            const total = document.getElementById('total').value;
+            
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ month, days, total })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    alert(data.error);
+                    return;
+                }
+                
+                // Add month to the result
+                data.month = parseInt(month);
+                
+                // Display current results
+                displayResults(data, document.getElementById('currentResults'));
+                
+                // Add to history
+                history.unshift(data);
+                localStorage.setItem('incomeHistory', JSON.stringify(history));
+                updateHistory();
+                
+                // Switch to results tab
+                const currentTab = document.querySelector('#current-tab');
+                const tab = new bootstrap.Tab(currentTab);
+                tab.show();
+                
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+
+        // Initialize history on page load
+        updateHistory();
+
+        // Add bubbles
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            // Random size between 30px and 100px
+            const size = Math.random() * 70 + 30;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            // Random starting and ending X positions
+            const startX = Math.random() * 100;
+            const endX = startX + (Math.random() * 40 - 20);
+            
+            // Random duration between 8 and 15 seconds
+            const duration = Math.random() * 7 + 8;
+            
+            bubble.style.setProperty('--start-x', `${startX}vw`);
+            bubble.style.setProperty('--end-x', `${endX}vw`);
+            bubble.style.setProperty('--duration', `${duration}s`);
+            
+            document.querySelector('.bubble-container').appendChild(bubble);
+            
+            // Remove bubble after animation
+            bubble.addEventListener('animationend', () => {
+                bubble.remove();
+            });
+        }
+
+        // Create bubbles periodically
+        setInterval(createBubble, 1000);
+
+        // Create initial bubbles
+        for (let i = 0; i < 15; i++) {
+            createBubble();
+        }
+    </script>
+</body>
+</html>
